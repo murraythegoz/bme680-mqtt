@@ -1,0 +1,12 @@
+[Unit]
+Description=Bosch BME680 sensor to Home Assistant via MQTT
+After=multi-user.target
+#Conflicts=getty@tty1.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/sbin/bme680-mqtt.py
+StandardInput=tty-force
+
+[Install]
+WantedBy=multi-user.target

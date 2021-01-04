@@ -77,7 +77,6 @@ try:
         if sensor.get_sensor_data() and sensor.data.heat_stable:
             gas = sensor.data.gas_resistance
             burn_in_data.append(gas)
-##            print("Gas: {0} Ohms".format(gas))
             time.sleep(1)
 
     gas_baseline = sum(burn_in_data[-50:]) / 50.0
@@ -88,8 +87,6 @@ try:
     # This sets the balance between humidity and gas reading in the 
     # calculation of air_quality_score (25:75, humidity:gas)
     hum_weighting = 0.25
-
-##    print("Gas baseline: {0} Ohms, humidity baseline: {1:.2f} %RH\n".format(gas_baseline, hum_baseline))
 
     while True:
         if sensor.get_sensor_data() and sensor.data.heat_stable:
@@ -121,11 +118,14 @@ try:
             pressure = str(round(sensor.data.pressure, 2))
             air_qual = str(round(air_quality_score, 2))
 
-##            print("Gas: {0:.2f} Ohms,humidity: {1:.2f} %RH,air quality: {2:.2f}".format(gas, hum, air_quality_score))
-
+            ##HASS autodiscovery
             device_class= { "name": sensor_name+" status", 
                             "stat_t": sensor_name+"/tele/HASS_STATE", 
                             "json_attr_t": sensor_name+"/tele/HASS_STATE",
+                            "avty_t": sensor_name+"/tele/LWT",
+                            "pl_avail": "Online",
+                            "pl_not_avail": "Offline",
+                            "unit_of_meas":"%",
                             "val_tpl": "{{value_json['RSSI']}}", 
                             "uniq_id": sensor_name+"_status", 
                             "dev": {"ids": [sensor_name], 

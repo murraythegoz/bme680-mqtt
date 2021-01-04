@@ -11,4 +11,5 @@ Everything is auto set in the code, you just have to configure the following par
 
 Finally you may want to [customise](https://home-assistant.io/docs/configuration/customizing-devices/) the look of the sensors in the Home-assistant front end. 
 
+
 <img src="https://github.com/murraythegoz/bme680-mqtt/blob/master/bme680-mqtt.PNG">

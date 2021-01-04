@@ -8,6 +8,7 @@
 import bme680
 import time
 import json
+import socket
 
 import paho.mqtt.client as mqtt
 import paho.mqtt.publish as publish
@@ -30,9 +31,28 @@ mqtt_password="hass_mqtt_pass"
 
 config_prefix ="homeassistant/sensor/"+sensor_name
 
+#set MQTT LWT
+def on_connect(client, userdata, flags, rc):
+        print("Connected with result code "+str(rc))
+        client.publish(sensor_name+"/tele/LWT","Online",qos=0,retain=True)
+
+#get local_IP
+def get_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.255.255.255', 1))
+        IP = s.getsockname()[0]
+    except Exception:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
 
 client = mqtt.Client(sensor_name)
 client.username_pw_set(username=mqtt_username,password=mqtt_password)
+client.on_connect = on_connect
+client.will_set(sensor_name+"/tele/LWT","Offline",qos=0,retain=True)
 client.connect(broker)
 client.loop_start()
 
